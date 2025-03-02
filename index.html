@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator - IT 3rd Semester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background: linear-gradient(to right, #74ebd5, #ace5cd);
+            color: #333;
+        }
+        table {
+            width: 70%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        select {
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            margin: 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 20px;
+            color: #444;
+        }
+        #result {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>IT III Semester CGPA Calculator</h1>
+    <h2>Enter your grades to calculate CGPA</h2>
+    <table id="gradeTable">
+        <tr>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Credit</th>
+        </tr>
+        <tr><td>Discrete Mathematics</td><td><select class="grade"></select></td><td>4</td></tr>
+        <tr><td>DPCO</td><td><select class="grade"></select></td><td>4</td></tr>
+        <tr><td>DBMS</td><td><select class="grade"></select></td><td>3</td></tr>
+        <tr><td>OOPs</td><td><select class="grade"></select></td><td>3</td></tr>
+        <tr><td>DSA</td><td><select class="grade"></select></td><td>3</td></tr>
+        <tr><td>DSA Lab</td><td><select class="grade"></select></td><td>1.5</td></tr>
+        <tr><td>OOPs Lab</td><td><select class="grade"></select></td><td>1.5</td></tr>
+        <tr><td>DBMS Lab</td><td><select class="grade"></select></td><td>1.5</td></tr>
+        <tr><td>Professional Development</td><td><select class="grade"></select></td><td>1</td></tr>
+    </table>
+    <h3 id="result"></h3>
+    <button onclick="calculateCGPA()">Calculate CGPA</button>
+    
+    <script>
+        const gradePoints = {"O": 10, "A+": 9, "A": 8, "B+": 7, "B": 6, "C": 5, "U": 0};
+        
+        document.querySelectorAll(".grade").forEach(select => {
+            Object.keys(gradePoints).forEach(grade => {
+                let option = document.createElement("option");
+                option.value = grade;
+                option.textContent = grade;
+                select.appendChild(option);
+            });
+        });
+        
+        function calculateCGPA() {
+            let rows = document.querySelectorAll("#gradeTable tr");
+            let totalCredits = 0, totalPoints = 0;
+            let hasFail = false;
+            
+            for (let i = 1; i < rows.length; i++) {
+                let grade = rows[i].cells[1].getElementsByTagName("select")[0].value;
+                let credit = parseFloat(rows[i].cells[2].textContent);
+                
+                if (grade === "U") {
+                    hasFail = true;
+                }
+                
+                if (!isNaN(credit) && gradePoints[grade] !== undefined) {
+                    totalCredits += credit;
+                    totalPoints += credit * gradePoints[grade];
+                }
+            }
+            
+            if (hasFail) {
+                document.getElementById("result").innerHTML = "<span style='color: red; font-size: 20px;'>You should pass all the exams.</span>";
+                return;
+            }
+            
+            let cgpa = totalCredits ? (totalPoints / totalCredits).toFixed(2) : 0;
+            document.getElementById("result").innerHTML = `CGPA: <span style='color: #007bff;'>${cgpa}</span>`;
+        }
+    </script>
+</body>
+</html>
