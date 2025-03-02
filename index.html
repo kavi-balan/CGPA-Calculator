@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
-            background: linear-gradient(to right, #74ebd5, #ace5cd);
+            background: linear-gradient(to right, #74ebd5, #acb6e5);
             color: #333;
         }
         table {
@@ -64,7 +64,7 @@
     </style>
 </head>
 <body>
-    <h1>IT III Semester CGPA Calculator</h1>
+    <h1>IT 3rd Semester CGPA Calculator</h1>
     <h2>Enter your grades to calculate CGPA</h2>
     <table id="gradeTable">
         <tr>
@@ -100,15 +100,10 @@
         function calculateCGPA() {
             let rows = document.querySelectorAll("#gradeTable tr");
             let totalCredits = 0, totalPoints = 0;
-            let hasFail = false;
             
             for (let i = 1; i < rows.length; i++) {
                 let grade = rows[i].cells[1].getElementsByTagName("select")[0].value;
                 let credit = parseFloat(rows[i].cells[2].textContent);
-                
-                if (grade === "U") {
-                    hasFail = true;
-                }
                 
                 if (!isNaN(credit) && gradePoints[grade] !== undefined) {
                     totalCredits += credit;
@@ -116,12 +111,8 @@
                 }
             }
             
-            if (hasFail) {
-                document.getElementById("result").innerHTML = "<span style='color: red; font-size: 20px;'>You should pass all the exams.</span>";
-                return;
-            }
-            
             let cgpa = totalCredits ? (totalPoints / totalCredits).toFixed(2) : 0;
+            
             document.getElementById("result").innerHTML = `CGPA: <span style='color: #007bff;'>${cgpa}</span>`;
         }
     </script>
